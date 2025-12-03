@@ -26,7 +26,7 @@ class DetalhesScreen extends StatelessWidget {
                 errorBuilder: (context, error, stackTrace) {
                   return Center(
                     child: Icon(
-                      Icons.image_not_supported,
+                      Icons.restaurant,
                       size: 64,
                       color: Colors.grey[400],
                     ),
@@ -42,39 +42,51 @@ class DetalhesScreen extends StatelessWidget {
                   Text(
                     produto.nome,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF2C3E50),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
-                      vertical: 8,
+                      vertical: 12,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.deepOrange[100],
-                      borderRadius: BorderRadius.circular(8),
+                      color: const Color(0xFFE85D04),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFE85D04).withOpacity(0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: Text(
                       'R\$ ${produto.preco.toStringAsFixed(2)}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepOrange[700],
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
                   Text(
                     'Descrição',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF2C3E50),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   Text(
                     'Este é um produto delicioso do nosso cardápio. Preparado com os melhores ingredientes e muito cuidado, garantindo a sua satisfação em cada mordida.',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.grey[700],
+                      height: 1.6,
+                    ),
                   ),
                   const SizedBox(height: 32),
                   SizedBox(
@@ -92,9 +104,15 @@ class DetalhesScreen extends StatelessWidget {
                       icon: const Icon(Icons.shopping_cart),
                       label: const Text('Adicionar ao Carrinho'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: const Color(0xFFE85D04),
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        textStyle: const TextStyle(fontSize: 16),
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ),

@@ -14,8 +14,23 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Cardápio Digital',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFFE85D04),
+          brightness: Brightness.light,
+        ),
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          backgroundColor: Color(0xFFE85D04),
+          foregroundColor: Colors.white,
+          centerTitle: true,
+        ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          elevation: 8,
+          selectedItemColor: Color(0xFFE85D04),
+          unselectedItemColor: Colors.grey,
+          backgroundColor: Colors.white,
+        ),
       ),
       initialRoute: '/',
       routes: {
