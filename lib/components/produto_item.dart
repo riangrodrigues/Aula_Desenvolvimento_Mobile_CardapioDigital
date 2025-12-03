@@ -3,20 +3,19 @@ import '../models/produto.dart';
 
 class ProdutoItem extends StatelessWidget {
   final Produto produto;
+  final Function(Produto)? onAdicionarAoCarrinho;
 
   const ProdutoItem({
     super.key,
     required this.produto,
+    this.onAdicionarAoCarrinho,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(
-          '/detalhes',
-          arguments: produto,
-        );
+        Navigator.of(context).pushNamed('/detalhes', arguments: produto);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -105,6 +104,31 @@ class ProdutoItem extends StatelessWidget {
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (onAdicionarAoCarrinho != null) {
+                            onAdicionarAoCarrinho!(produto);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFE85D04),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          'Adicionar',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

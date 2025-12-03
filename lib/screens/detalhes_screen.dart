@@ -95,7 +95,9 @@ class DetalhesScreen extends StatelessWidget {
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('${produto.nome} adicionado ao carrinho!'),
+                            content: Text(
+                              '${produto.nome} adicionado ao carrinho!',
+                            ),
                             backgroundColor: Colors.green,
                             duration: const Duration(seconds: 2),
                           ),
