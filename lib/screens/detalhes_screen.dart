@@ -11,13 +11,12 @@ class DetalhesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalhes do Produto'),
-        backgroundColor: Colors.deepOrange,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              height: 300,
+              height: 350,
               width: double.infinity,
               color: Colors.grey[200],
               child: Image.network(
@@ -27,7 +26,7 @@ class DetalhesScreen extends StatelessWidget {
                   return Center(
                     child: Icon(
                       Icons.restaurant,
-                      size: 64,
+                      size: 100,
                       color: Colors.grey[400],
                     ),
                   );
@@ -57,7 +56,7 @@ class DetalhesScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFE85D04).withOpacity(0.2),
+                          color: const Color(0xFFE85D04).withValues(alpha: 0.2),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -93,15 +92,8 @@ class DetalhesScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              '${produto.nome} adicionado ao carrinho!',
-                            ),
-                            backgroundColor: Colors.green,
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
+                        // Recuperar HomeScreen do contexto para adicionar ao carrinho
+                        Navigator.pop(context, produto);
                       },
                       icon: const Icon(Icons.shopping_cart),
                       label: const Text('Adicionar ao Carrinho'),

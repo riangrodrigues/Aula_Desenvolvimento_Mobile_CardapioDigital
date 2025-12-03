@@ -11,7 +11,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  List<Produto> carrinho = [];
+  Map<String, Produto> carrinho = {};
+
+  void _adicionarAoCarrinho(Produto produto) {
+    setState(() {
+      if (carrinho.containsKey(produto.id)) {
+        carrinho[produto.id]!.quantidade++;
+      } else {
+        carrinho[produto.id] = Produto(
+          id: produto.id,
+          nome: produto.nome,
+          preco: produto.preco,
+          imagemUrl: produto.imagemUrl,
+          quantidade: 1,
+        );
+      }
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${produto.nome} adicionado ao carrinho!'),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,38 +68,41 @@ class _HomeScreenState extends State<HomeScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         int crossAxisCount = 2;
+        double childAspectRatio = 0.65;
+        double padding = 16;
+        double spacing = 14;
+
         if (constraints.maxWidth > 1200) {
+          crossAxisCount = 5;
+          padding = 24;
+          spacing = 16;
+        } else if (constraints.maxWidth > 900) {
           crossAxisCount = 4;
-        } else if (constraints.maxWidth > 800) {
+          padding = 20;
+          spacing = 15;
+          childAspectRatio = 0.68;
+        } else if (constraints.maxWidth > 600) {
           crossAxisCount = 3;
+          padding = 18;
+          spacing = 14;
+          childAspectRatio = 0.66;
         }
 
         return Container(
           color: const Color(0xFFFAFAFA),
           child: GridView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(padding),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
-              childAspectRatio: 0.75,
-              crossAxisSpacing: 14,
-              mainAxisSpacing: 14,
+              childAspectRatio: childAspectRatio,
+              crossAxisSpacing: spacing,
+              mainAxisSpacing: spacing,
             ),
             itemCount: Produto.itens.length,
             itemBuilder: (context, index) {
               return ProdutoItem(
                 produto: Produto.itens[index],
-                onAdicionarAoCarrinho: (produto) {
-                  setState(() {
-                    carrinho.add(produto);
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${produto.nome} adicionado ao carrinho!'),
-                      backgroundColor: Colors.green,
-                      duration: const Duration(seconds: 1),
-                    ),
-                  );
-                },
+                onAdicionarAoCarrinho: _adicionarAoCarrinho,
               );
             },
           ),
@@ -101,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(40),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFE85D04).withOpacity(0.2),
+                      color: const Color(0xFFE85D04).withValues(alpha: 0.2),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -135,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    double total = carrinho.fold(0, (sum, item) => sum + item.preco);
+    double total = carrinho.values.fold(0, (sum, item) => sum + (item.preco * item.quantidade));
 
     return Container(
       color: const Color(0xFFFAFAFA),
@@ -146,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(16),
               itemCount: carrinho.length,
               itemBuilder: (context, index) {
-                final produto = carrinho[index];
+                final produto = carrinho.values.elementAt(index);
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12),
                   elevation: 2,
@@ -198,13 +224,35 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.close, color: Colors.red),
-                          onPressed: () {
-                            setState(() {
-                              carrinho.removeAt(index);
-                            });
-                          },
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.add_circle,
+                                  color: Color(0xFFE85D04), size: 24),
+                              onPressed: () {
+                                setState(() {
+                                  produto.quantidade++;
+                                });
+                              },
+                            ),
+                            Text(
+                              '${produto.quantidade}',
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.remove_circle,
+                                  color: Colors.red, size: 24),
+                              onPressed: () {
+                                setState(() {
+                                  if (produto.quantidade > 1) {
+                                    produto.quantidade--;
+                                  } else {
+                                    carrinho.remove(produto.id);
+                                  }
+                                });
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -222,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 8,
                   offset: const Offset(0, -4),
                 ),
